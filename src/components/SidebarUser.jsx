@@ -9,6 +9,7 @@ import HeadphonesIcon from '@mui/icons-material/Headphones';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
 
 const SidebarContainer = styled('div')(({ theme }) => ({
@@ -110,23 +111,31 @@ display: 'flex',
 import PropTypes from 'prop-types';
 
 const SidebarUser = ({name, email}) => {
-return (
-    <SidebarContainer>
-        <UserPhoto>
-            <Image src={userPhoto} alt="User Photo"/>
-        </UserPhoto>
-        <SidebarOptions>
-            <UserName>{name}</UserName>
-            <ActiveUserEmail><Circle/>{email}</ActiveUserEmail>
-            <Link to='/history'><Option><IconWrapper><LibraryBooksIcon /></IconWrapper>Historial</Option></Link>
-            
-            <Option><IconWrapper><NotificationsIcon /></IconWrapper>Notificaciones</Option>
-            <Option><IconWrapper><SettingsIcon /></IconWrapper>Configuración</Option>
-            <Option><IconWrapper><HeadphonesIcon /></IconWrapper>Actividades</Option>
-            <Link to='/'><Option><IconWrapper><ExitToAppIcon /></IconWrapper>Salir</Option></Link>
-        </SidebarOptions>
-    </SidebarContainer>
-)
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        navigate('/');
+    }
+        
+    return (
+        <SidebarContainer>
+            <UserPhoto>
+                <Image src={userPhoto} alt="User Photo"/>
+            </UserPhoto>
+            <SidebarOptions>
+                <UserName>{name}</UserName>
+                <ActiveUserEmail><Circle/>{email}</ActiveUserEmail>
+                <Link to='/history'><Option><IconWrapper><LibraryBooksIcon /></IconWrapper>Historial</Option></Link>
+                
+                <Option><IconWrapper><NotificationsIcon /></IconWrapper>Notificaciones</Option>
+                <Option><IconWrapper><SettingsIcon /></IconWrapper>Configuración</Option>
+                <Option><IconWrapper><HeadphonesIcon /></IconWrapper>Actividades</Option>
+                <Option onClick={handleLogout}><IconWrapper><ExitToAppIcon /></IconWrapper>Salir</Option>
+            </SidebarOptions>
+        </SidebarContainer>
+    )
 }
 SidebarUser.propTypes = {
     name: PropTypes.string.isRequired,

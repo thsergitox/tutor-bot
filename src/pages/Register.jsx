@@ -27,7 +27,7 @@ const Form = styled('form')({
     justifyContent: 'start',
     alignItems: 'center',
     width: '50%',
-    height: '80%',
+    height: '70%',
     padding: '20px',
     boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
     borderRadius: '10px',
@@ -44,19 +44,12 @@ const Input = styled('input')({
 });
 
 const Button = styled('button')({
-    paddingBottom: '10px 20px',
+    padding: '10px 20px',
+    marginTop: '20px',
     borderRadius: '5px',
     border: 'none',
     backgroundColor: 'var(--primary-color)',
     color: '#fff',
-    cursor: 'pointer',
-    width: '30%',
-});
-const ButtonRegister = styled('button')({
-    borderRadius: '5px',
-    borderColor: 'var(--primary-color)',
-    backgroundColor: '#fff',
-    color: 'var(--primary-color)',
     cursor: 'pointer',
     width: '30%',
 });
@@ -76,8 +69,9 @@ const LogoDiv = styled('div')({
     pointerEvents: 'visibleFill',
   })
 
-const Login = () => {
+const Register = () => {
     const [userName, setUserName] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [status, setStatus] = useState('');
@@ -95,7 +89,16 @@ const Login = () => {
         event.preventDefault();
         
         try {
-            const response = await axios.get(`${import.meta.env.VITE_REACT_API_URL}/api/v1/users/user?username=${userName}&password=${password}&email=${email}`);
+            const response = await axios.post(`${import.meta.env.VITE_REACT_API_URL}/api/v1/users/create`, {
+                username: userName,
+                name: name,
+                email: email,
+                password: password,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
             if (response.status === 200) {
                 localStorage.setItem('user', JSON.stringify(response.data));
@@ -105,14 +108,10 @@ const Login = () => {
                 
             }
         } catch (error) {
-            setStatus('Contraseña, usario o email incorrecto')
+            setStatus('Hubo un error al registrarte, intenta de nuevo')
             console.error('Error:', error);
         }
     };
-
-    const handleRegister = () => {
-        navigate('/register');
-    }
 
     return (
         <ContainerPrincipal>
@@ -122,7 +121,14 @@ const Login = () => {
                   <Typography variant='h3' sx={{fontFamily: 'Lily Script One'}}>Tutor Bot</Typography>
             </LogoDiv>
             <Form onSubmit={handleSubmit}>
-                <h1>Inicio de sesión</h1>
+                <h1>Regístrate</h1>
+                <Input
+                    type="text"
+                    placeholder="Nombre"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                />
                 <Input
                     type="text"
                     placeholder="username"
@@ -146,10 +152,7 @@ const Login = () => {
                 />
                 <p style={{color: 'red'}}> {status} </p>
                 
-                <Button type="submit">Iniciar sesión</Button>
-                <p style={{color:'var(--primary-color)', paddingTop:'20px'}}>¿Eres nuevo? Regístrate</p>
-                <ButtonRegister onClick={handleRegister}>Regístrate</ButtonRegister>
-                
+                <Button type="submit">Registrate</Button>               
                 
             </Form>
             
@@ -157,4 +160,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Register;

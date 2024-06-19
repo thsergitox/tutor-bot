@@ -2,6 +2,8 @@
 import PrincipalMenuOptions from '../components/PrincipalMenuOptions'
 import SidebarUser from '../components/SidebarUser'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom';
+import  { useEffect, useState } from 'react';
 
 
 const ContainerMenuPrincipal = styled('div')({
@@ -16,10 +18,23 @@ const ContainerMenuPrincipal = styled('div')({
 })
 
 const PrincipalMenu = () => {
+
+  const [user, setUser] = useState({})
+
+  const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            navigate('/principalmenu');
+        }
+        setUser(user)
+    }, [navigate]);
+
   return (
     <>
         <ContainerMenuPrincipal>
-            <SidebarUser email='ricardo.ulloa.v@uni.pe' name='Ricardo'/>
+            <SidebarUser email={user.email} name={user.name}/>
             <PrincipalMenuOptions/>
         </ContainerMenuPrincipal>
     </>

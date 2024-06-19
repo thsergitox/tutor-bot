@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
-import  { useState } from 'react';
+import  { useState, useEffect } from 'react';
 import { TextField, Button } from '@mui/material';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const InputContainer = styled('div')({
     display: 'flex',
@@ -24,12 +26,25 @@ const InputContainer = styled('div')({
 const InputUserChat = ({ onSendMessage }) => {
   const [newMessage, setNewMessage] = useState('');
 
+  const [user, setUser] = useState({})
+
+  const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            navigate('/');
+        }
+        setUser(user)
+    }, [navigate]);
+
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
       setNewMessage('');
       try {
         const response = await axios.post(`${import.meta.env.VITE_REACT_API_URL}/api/v1/bot/ask`, {
-           question: newMessage
+           question: newMessage,
+           name: user.name
         }, {
             headers: {
                 'Content-Type': 'application/json',

@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import logo from '../assets/images/logoTutorBot.png'
 import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography'
+import { useNavigate } from 'react-router-dom';
+import  { useEffect } from 'react';
 
 
 const ContainerHome = styled('div')({
@@ -41,7 +43,18 @@ const ButtonHome = styled('button')({
   alignItems: 'center',
 })
 
-const index = () => {
+const Home = () => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+
+    const user = localStorage.getItem('user');
+    if (user) {
+        navigate('/principalmenu');
+    }
+  }, [navigate]);
+
 
   return (
     <ContainerHome>
@@ -59,4 +72,4 @@ const index = () => {
   )
 }
 
-export default index
+export default Home

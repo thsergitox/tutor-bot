@@ -3,6 +3,7 @@ import CardHistotial from '../components/CardHistotial';
 import Navbar from '../components/NavbarEbooks';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ContainerCustom = styled('div')({
     display: 'flex',
@@ -38,10 +39,22 @@ const GridContainer = styled('div')({
 const Historial = () => {
     const [questionnaires, setQuestionaries] = useState([]);
 
+    const [user, setUser] = useState({})
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            navigate('/');
+        }
+        setUser(user)
+    }, [navigate]);
+
     useEffect(() => {
         const fetchQuestionnaires = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_REACT_API_URL}/api/v1/questionnaires/all/1`);
+                const response = await axios.get(`${import.meta.env.VITE_REACT_API_URL}/api/v1/questionnaires/all/${user.user_id}`);
 
                 if (response.status === 200) {
                     setQuestionaries(response.data.questionnaires);
@@ -54,7 +67,7 @@ const Historial = () => {
         };
 
         fetchQuestionnaires();
-    }, []);
+    }, [user.user_id]);
 
     return (
         <ContainerCustom>
