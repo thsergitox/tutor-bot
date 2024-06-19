@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import imageChatbot from '../assets/images/chatbotImage.png';
 import Navbar from '../components/NavbarEbooks';
 import Typography from '@mui/material/Typography';
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -67,22 +70,35 @@ const LogoDiv = styled('div')({
   })
 
 const Login = () => {
-    const [name, setName] = useState('');
+    const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [status, setStatus] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
         
-        console.log('Nombre:', name);
-        console.log('Correo:', email);
-        console.log('Contraseña:', password);
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_REACT_API_URL}/api/v1/users/user?username=${userName}&password=${password}&email=${email}`);
+
+            if (response.status === 200) {
+                navigate('/principalmenu');
+            } else {
+                console.log('IDK')
+                
+            }
+        } catch (error) {
+            setStatus('Contraseña, usario o email incorrecto')
+            console.error('Error:', error);
+        }
     };
 
     return (
         <ContainerPrincipal>
             <LogoDiv>
-            <Navbar page='Regresar' route='/principalmenu'/>
+            <Navbar page='Regresar' route='/'/>
                   <Image src={imageChatbot} alt='logo tutor bot'/>
                   <Typography variant='h3' sx={{fontFamily: 'Lily Script One'}}>Tutor Bot</Typography>
             </LogoDiv>
@@ -90,9 +106,9 @@ const Login = () => {
                 <h1>Inicio de sesión</h1>
                 <Input
                     type="text"
-                    placeholder="Nombre"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    placeholder="username"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
                     required
                 />
                 <Input
@@ -109,8 +125,8 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                
-                    <Button type="submit">Iniciar sesión</Button>
+                <p style={{color: 'red'}}> {status} </p>
+                <Button type="submit">Iniciar sesión</Button>
                 
                 
             </Form>

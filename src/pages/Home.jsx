@@ -49,7 +49,7 @@ const index = () => {
       <Title>
         <Typography variant='h3' sx={{fontFamily: 'Lily Script One'}}>Tutor Bot</Typography>
       </Title>
-      <Link to = "/principalmenu">
+      <Link to = "/login">
       <ButtonHome >
         <Typography variant='h5'>Get Started</Typography>
       </ButtonHome>
