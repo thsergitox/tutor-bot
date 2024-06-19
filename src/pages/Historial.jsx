@@ -63,7 +63,7 @@ const Historial = () => {
                 <h2>Exámenes recientes</h2>
                 <GridContainer>
                     {questionnaires.map((questionnaire) => (
-                        <CardHistotial key={questionnaire.id} topic={questionnaire.title} score={questionnaire.score} />
+                        <CardHistotial key={questionnaire.id} topic={questionnaire.title} score={questionnaire.score} questionarie_id={questionnaire.id}/>
                     ))}
                 </GridContainer>
             </HistorialContent>
