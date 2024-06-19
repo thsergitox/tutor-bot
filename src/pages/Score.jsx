@@ -47,13 +47,14 @@ const FinalScoreDiv = styled('div')({
 
 const Score = () => {
     const location = useLocation();
-    const { score } = location.state || { score: 0 }; // Default to 0 if score is not provided
+    const { score, topic } = location.state || { score: 0 }; // Default to 0 if score is not provided
 
     return (
         <ContainerQuizMenuPrincipal>
             <Navbar page='Regresar' route='/principalmenu' />
             <ScoreQuizDiv>
                 <h1>Resultado obtenido</h1>
+                <h2>{topic}</h2>
                 <FinalScoreDiv>
                     <h2>Calificación: {score}</h2>
                 </FinalScoreDiv>
