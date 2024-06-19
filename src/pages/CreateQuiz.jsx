@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -63,6 +63,16 @@ const CreateQuiz = () => {
     const [topic, settopic] = useState('');
     const [numPreguntas, setNumPreguntas] = useState('');
     const navigate = useNavigate();
+    const [user, setUser] = useState({})
+
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            navigate('/');
+        }
+        setUser(user)
+    }, [navigate]);
 
     const handletopicChange = (event) => {
         settopic(event.target.value);
@@ -72,11 +82,14 @@ const CreateQuiz = () => {
         setNumPreguntas(event.target.value);
     };
 
+    
+
     const handleSubmit = async () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_REACT_API_URL}/api/v1/questionnaires/create`, {
                 topic: topic,
-                num_preg: parseInt(numPreguntas)
+                num_preg: parseInt(numPreguntas),
+                user_id: user.user_id
             }, {
                 headers: {
                     'Content-Type': 'application/json',
